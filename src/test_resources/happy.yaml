@@ -1,0 +1,5 @@
+apps:
+  - name: bbc
+    url: www.bbc.com
+  - name: youtube
+    url: www.youtube.com

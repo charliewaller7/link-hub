@@ -1,0 +1,6 @@
+apps:
+  - name: bbc
+    link:
+      value: www.bbc.com
+  - hello: youtube
+    url: www.youtube.com
