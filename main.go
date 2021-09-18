@@ -8,27 +8,32 @@ import (
 	"main/src"
 	"net/http"
 	"os"
+	"flag"
 )
 
 var router *gin.Engine
 
 func main() {
-	// TODO - Path as cli param
-	path := "config.yaml"
+	path := flag.String("file", "config.yaml", "Config file to parse.")
+	port := flag.String("port", "", "Port to run Link hub on.")
+	flag.Parse()
 
-	config, err := src.LoadConfig(path)
+	if *port != "" {
+		_ = os.Setenv("PORT", *port)
+	}
+	if os.Getenv("PORT") == "" {
+		_ = os.Setenv("PORT", "10101")
+	}
+
+	config, err := src.LoadConfig(*path)
 	if err != nil {
-		panic(fmt.Sprintf("Fatal|Unable to load config %q|%v", path, err))
+		panic(fmt.Sprintf("Fatal|Unable to load config %q|%v", *path, err))
 	}
 
 	runRouter(config)
 }
 
 func runRouter(config data.Config) {
-	if p := os.Getenv("PORT"); p == "" {
-		_ = os.Setenv("PORT", "10101")
-	}
-
 	router = gin.Default()
 	router.LoadHTMLGlob("static/templates/*")
 	router.Static("/static", "./static")

@@ -3,5 +3,8 @@ apps:
     url: localhost:9200
   - name: Kibana
     url: localhost:5601
+  - name: Grafana
+    url: localhost:3000
   - name: My Web Server
     url: localhost:8080
+
