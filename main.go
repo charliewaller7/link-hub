@@ -2,18 +2,17 @@ package main
 
 import (
 	"fmt"
+	"github.com/fatih/structs"
+	"github.com/gin-gonic/gin"
 	"main/data"
 	"main/src"
 	"net/http"
-
-	"github.com/fatih/structs"
-	"github.com/gin-gonic/gin"
+	"os"
 )
 
 var router *gin.Engine
 
 func main() {
-
 	// TODO - Path as cli param
 	path := "config.yaml"
 
@@ -26,9 +25,13 @@ func main() {
 }
 
 func runRouter(config data.Config) {
-	router = gin.Default()
-	router.LoadHTMLGlob("templates/*")
+	if p := os.Getenv("PORT"); p == "" {
+		_ = os.Setenv("PORT", "10101")
+	}
 
+	router = gin.Default()
+	router.LoadHTMLGlob("static/templates/*")
+	router.Static("/static", "./static")
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(
 			http.StatusOK, "index.html", gin.H(structs.Map(config)),
